@@ -8,12 +8,12 @@ namespace StoreInventoryTest
         {
             // Arrange 
             StoreInventory inventory = new StoreInventory()
-            {
-                new StoreItem(1000, 10, PeripheriItems.None),
-                new StoreItem(500, 3, PeripheriItems.None),
-                new StoreItem(3000, 5, PeripheriItems.None),
-                new StoreItem(1400, 20, PeripheriItems.None)
-            };
+        {
+            new ComputerPeripheralsStore("Company1", 10, 2.5, PeripheriItems.None),
+            new ComputerPeripheralsStore("Company2", 3, 1.2, PeripheriItems.None),
+            new ComputerPeripheralsStore("Company3", 5, 4.8, PeripheriItems.None),
+            new ComputerPeripheralsStore("Company4", 20, 3.0, PeripheriItems.None)
+        };
 
             // Act
             int result = inventory.Count;
@@ -40,12 +40,12 @@ namespace StoreInventoryTest
         {
             // Arrange 
             StoreInventory inventory = new StoreInventory()
-            {
-                new StoreItem(1000, 10, PeripheriItems.None),
-                new StoreItem(500, 3, PeripheriItems.None),
-                new StoreItem(3000, 5, PeripheriItems.None),
-                new StoreItem(1400, 20, PeripheriItems.None)
-            };
+        {
+            new ComputerPeripheralsStore("Company1", 10, 2.5, PeripheriItems.None),
+            new ComputerPeripheralsStore("Company2", 3, 1.2, PeripheriItems.None),
+            new ComputerPeripheralsStore("Company3", 5, 4.8, PeripheriItems.None),
+            new ComputerPeripheralsStore("Company4", 20, 3.0, PeripheriItems.None)
+        };
 
             // Act
             inventory.Clear();
@@ -59,7 +59,7 @@ namespace StoreInventoryTest
         {
             // Arrange
             StoreInventory inventory = new StoreInventory();
-            StoreItem newItem = new StoreItem(200, 2, PeripheriItems.Mouse);
+            ComputerPeripheralsStore newItem = new ComputerPeripheralsStore("Company5", 2, 1.5, PeripheriItems.Mouse);
 
             // Act
             inventory.Add(newItem);
@@ -68,16 +68,6 @@ namespace StoreInventoryTest
             Assert.IsTrue(inventory.Contains(newItem));
         }
 
-        [TestMethod]
-        public void Add_Invalid()
-        {
-            // Arrange
-            StoreInventory inventory = new StoreInventory();
-            StoreItem newItem = new StoreItem(-200, 2, PeripheriItems.Mouse);
-
-            // Act and Assert
-            Assert.ThrowsException<ArgumentException>(() => inventory.Add(newItem));
-        }
 
         [TestMethod]
         public void Add_NullInput()
@@ -93,20 +83,16 @@ namespace StoreInventoryTest
         public void Remove_Valid()
         {
             // Arrange
-            StoreItem itemToRemove = new StoreItem(500, 3, PeripheriItems.None);
-            StoreInventory inventory = new StoreInventory()
-            {
-                new StoreItem(1000, 10, PeripheriItems.None),
-                new StoreItem(3000, 5, PeripheriItems.None),
-                new StoreItem(1400, 20, PeripheriItems.None)
-            };
+            StoreInventory inventory = new StoreInventory();
+            ComputerPeripheralsStore itemToRemove = new ComputerPeripheralsStore("Company2", 3, 1.2, PeripheriItems.None);
+            inventory.Add(itemToRemove);
 
             // Act
             bool result = inventory.Remove(itemToRemove);
 
             // Assert
             Assert.IsTrue(result);
-            Assert.IsFalse(inventory.Contains(itemToRemove));
+            Assert.IsFalse(inventory.Contains(itemToRemove)); 
         }
 
         [TestMethod]
@@ -114,13 +100,10 @@ namespace StoreInventoryTest
         {
             // Arrange
             StoreInventory inventory = new StoreInventory();
-            StoreItem itemToRemove = new StoreItem(500, 3, PeripheriItems.None);
+            ComputerPeripheralsStore itemToRemove = new ComputerPeripheralsStore("Company2", 3, 1.2, PeripheriItems.None);
 
-            // Act
-            bool result = inventory.Remove(itemToRemove);
-
-            // Assert
-            Assert.IsFalse(result);
+            // Act and Assert
+            Assert.ThrowsException<ArgumentException>(() => inventory.Remove(itemToRemove));
         }
 
         [TestMethod]
@@ -137,12 +120,13 @@ namespace StoreInventoryTest
         public void Contains_Valid()
         {
             // Arrange
-            StoreItem itemToCheck = new StoreItem(500, 3, PeripheriItems.None);
+            ComputerPeripheralsStore itemToCheck = new ComputerPeripheralsStore("Company3", 5, 5.0, PeripheriItems.Headphones);
             StoreInventory inventory = new StoreInventory()
             {
-                new StoreItem(1000, 10, PeripheriItems.None),
-                new StoreItem(3000, 5, PeripheriItems.None),
-                new StoreItem(1400, 20, PeripheriItems.None)
+                new ComputerPeripheralsStore("Company1", 10, 2.5, PeripheriItems.None),
+                new ComputerPeripheralsStore("Company2", 3, 1.2, PeripheriItems.None),
+                new ComputerPeripheralsStore("Company4", 20, 3.0, PeripheriItems.None),
+                itemToCheck
             };
 
             // Act
@@ -157,7 +141,7 @@ namespace StoreInventoryTest
         {
             // Arrange
             StoreInventory inventory = new StoreInventory();
-            StoreItem itemToCheck = new StoreItem(500, 3, PeripheriItems.None);
+            ComputerPeripheralsStore itemToCheck = new ComputerPeripheralsStore("Company5", 3, 1.2, PeripheriItems.None);
 
             // Act
             bool result = inventory.Contains(itemToCheck);
@@ -171,22 +155,21 @@ namespace StoreInventoryTest
         {
             // Arrange
             StoreInventory inventory = new StoreInventory()
-            {
-                new StoreItem(1000, 10, PeripheriItems.None),
-                new StoreItem(500, 3, PeripheriItems.None),
-                new StoreItem(3000, 5, PeripheriItems.None),
-                new StoreItem(1400, 20, PeripheriItems.None)
-            };
+        {
+            new ComputerPeripheralsStore("Company1", 10, 2.5, PeripheriItems.None),
+            new ComputerPeripheralsStore("Company2", 3, 1.2, PeripheriItems.None),
+            new ComputerPeripheralsStore("Company3", 5, 4.8, PeripheriItems.None),
+            new ComputerPeripheralsStore("Company4", 20, 3.0, PeripheriItems.None)
+        };
 
             // Act
             inventory.SortByPrice();
 
             var sortedItems = inventory.ToList();
-            Assert.AreEqual(500, sortedItems[0].Price);
-            Assert.AreEqual(1000, sortedItems[1].Price);
-            Assert.AreEqual(1400, sortedItems[2].Price);
-            Assert.AreEqual(3000, sortedItems[3].Price);
+            Assert.AreEqual(1.2, sortedItems[0].Price);
+            Assert.AreEqual(2.5, sortedItems[1].Price);
+            Assert.AreEqual(3.0, sortedItems[2].Price);
+            Assert.AreEqual(4.8, sortedItems[3].Price);
         }
-
     }
 }

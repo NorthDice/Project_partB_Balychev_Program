@@ -8,6 +8,6 @@ namespace Project_partB_Balychev_Program
 {
     internal interface Iinvoice
     {
-        void GetStorageInfo();
+        string GetStorageInfo();
     }
 }

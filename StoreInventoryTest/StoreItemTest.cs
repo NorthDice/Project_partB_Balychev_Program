@@ -1,14 +1,14 @@
 namespace StoreItemTest
 {
     [TestClass]
-    public class StoreItemTest
+    public class ComputerPeripheralsStoreTest
     {
         [TestMethod]
         public void Price_Valid()
         {
             // Arrange
             double price = 100.0;
-            StoreItem storeItem = new StoreItem(price, 5, PeripheriItems.Headphones);
+            ComputerPeripheralsStore storeItem = new ComputerPeripheralsStore("JBL", 5, price, PeripheriItems.Headphones);
 
             // Act
             double result = storeItem.Price;
@@ -24,7 +24,11 @@ namespace StoreItemTest
             double invalidPrice = -50.0;
 
             // Act and Assert
-            Assert.ThrowsException<ArgumentException>(() => new StoreItem(invalidPrice, 5, PeripheriItems.Headphones));
+            Assert.ThrowsException<ArgumentException>(() =>
+            {
+                var store = new ComputerPeripheralsStore("JBL", 5, 10.0, PeripheriItems.Headphones);
+                store.Price = invalidPrice;
+            });
         }
 
         [TestMethod]
@@ -32,7 +36,7 @@ namespace StoreItemTest
         {
             // Arrange
             int quantity = 10;
-            StoreItem storeItem = new StoreItem(75.0, quantity, PeripheriItems.Mouse);
+            ComputerPeripheralsStore storeItem = new ComputerPeripheralsStore("JBL", quantity, 75.0, PeripheriItems.Mouse);
 
             // Act
             int result = storeItem.QuantityInStock;
@@ -48,7 +52,11 @@ namespace StoreItemTest
             int invalidQuantity = -5;
 
             // Act and Assert
-            Assert.ThrowsException<ArgumentException>(() => new StoreItem(50.0, invalidQuantity, PeripheriItems.PowerBank));
+            Assert.ThrowsException<ArgumentException>(() =>
+            {
+                var store = new ComputerPeripheralsStore("JBL", 10, 50.0, PeripheriItems.PowerBank);
+                store.QuantityInStock = invalidQuantity;
+            });
         }
 
         [TestMethod]
@@ -56,7 +64,7 @@ namespace StoreItemTest
         {
             // Arrange
             PeripheriItems item = PeripheriItems.Keyboard;
-            StoreItem storeItem = new StoreItem(30.0, 15, item);
+            ComputerPeripheralsStore storeItem = new ComputerPeripheralsStore("JBL", 15, 30.0, item);
 
             // Act
             PeripheriItems result = storeItem.Type;
@@ -69,10 +77,44 @@ namespace StoreItemTest
         public void Items_Invalid()
         {
             // Arrange
-            PeripheriItems invalidItem = (PeripheriItems)99;
+            PeripheriItems invalidItem = (PeripheriItems)(((int)Enum.GetValues(typeof(PeripheriItems)).Cast<PeripheriItems>().Max()) + 1);
 
             // Act and Assert
-            Assert.ThrowsException<ArgumentException>(() => new StoreItem(20.0, 8, invalidItem));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+            {
+                var store = new ComputerPeripheralsStore("SomeCompany", 10, 50.0, PeripheriItems.Headphones);
+                store.Type = invalidItem;
+            });
+        }
+
+
+        [TestMethod]
+        public void CompanyName_LengthExceedsLimit_DefaultsToNoName()
+        {
+            // Arrange
+            string invalidName = "LongCompanyName123";
+
+            // Act and Assert
+            var ex = Assert.ThrowsException<ArgumentException>(() => new ComputerPeripheralsStore("JBL", 1, 0.99, PeripheriItems.Headphones)
+            {
+                CompanyName = invalidName
+            });
+
+            Assert.AreEqual("Company name length must be less then 12 letters", ex.Message);
+        }
+
+        [TestMethod]
+        public void CompanyName_SetToValidName()
+        {
+            // Arrange
+            string validName = "ValidName";
+
+            // Act
+            ComputerPeripheralsStore storeItem = new ComputerPeripheralsStore();
+            storeItem.CompanyName = validName;
+
+            // Assert
+            Assert.AreEqual(validName, storeItem.CompanyName);
         }
     }
 }

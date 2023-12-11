@@ -14,7 +14,7 @@ namespace Project_partB_Balychev_Program
 
         public StoreInventory()
         {
-            throw new NotImplementedException();
+            items = new List<StoreItem>();
         }
 
         public int Count => items.Count;
@@ -31,6 +31,11 @@ namespace Project_partB_Balychev_Program
 
         public void Add(StoreItem item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "Item cannot be null.");
+            }
+
             items.Add(item);
         }
 
@@ -56,13 +61,17 @@ namespace Project_partB_Balychev_Program
 
         public bool Remove(StoreItem item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "Item cannot be null.");
+            }
+
             if (!items.Contains(item))
             {
-                throw new ArgumentException("Item not found in the inventory.");
+                throw new ArgumentException("Item not found in the inventory.", nameof(item));
             }
 
             return items.Remove(item);
-            
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -75,12 +84,17 @@ namespace Project_partB_Balychev_Program
             items.CopyTo((StoreItem[])array, index);
         }
 
-        public void GetStorageInfo()
+        public string GetStorageInfo()
         {
+            string info = string.Empty;
+
             foreach (var item in items)
             {
-                item.ToString();
+                info += item.ToString();
             }
+
+            return info;
+
         }
     }
 }

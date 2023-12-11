@@ -101,7 +101,7 @@ namespace Project_partB_Balychev_Program
 
         public override string ToString()
         {
-            return $"Company name: {AlcoCompanyName} | Quantity in Stock {QuantityInStock} | Price {Price} | Type {Type}";
+            return $"Company name: {AlcoCompanyName} | Quantity in Stock {QuantityInStock} | Price {Price} | Type of alcohol {Type}";
         }
     }
 }

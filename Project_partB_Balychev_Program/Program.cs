@@ -1,7 +1,10 @@
-﻿class Program
+﻿using Project_partB_Balychev_Program;
+
+class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello world!");
+        runProgram Run = new runProgram();
+        Run.Run();
     }
 }

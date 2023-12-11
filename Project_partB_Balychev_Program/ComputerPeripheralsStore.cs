@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Project_partB_Balychev_Program
 {
-    internal class ComputerPeripheralsStore : StoreItem
+    public class ComputerPeripheralsStore : StoreItem
     {
         private string _companyName;
         private PeripheriItems _type;
@@ -99,7 +99,7 @@ namespace Project_partB_Balychev_Program
 
         public override string ToString()
         {
-            return $"Company name: {CompanyName} | Quantity in Stock {QuantityInStock} | Price {Price} | Type {Type}";
+            return $"Company name: {CompanyName} | Quantity in Stock {QuantityInStock} | Price {Price} | Type of product {Type}";
         }
     }
 }
