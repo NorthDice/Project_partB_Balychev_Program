@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Project_partB_Balychev_Program
 {
-    internal class AlcoholStore : StoreItem
+    public class AlcoholStore : StoreItem
     {
         private string _alcoCompanyName;
         private AlcoholItems _type;
@@ -98,10 +98,29 @@ namespace Project_partB_Balychev_Program
             }
         
         }
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            AlcoholStore other = (AlcoholStore)obj;
+            return AlcoCompanyName == other.AlcoCompanyName
+                && QuantityInStock == other.QuantityInStock
+                && Price == other.Price
+                && Type == other.Type;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(AlcoCompanyName, QuantityInStock, Price, Type);
+        }
+
 
         public override string ToString()
         {
-            return $"Company name: {AlcoCompanyName} | Quantity in Stock {QuantityInStock} | Price {Price} | Type of alcohol {Type}";
+            return $"\n Company name: {AlcoCompanyName} | Quantity in Stock {QuantityInStock} | Price {Price} | Type of alcohol {Type}";
         }
     }
 }

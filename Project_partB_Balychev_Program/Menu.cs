@@ -23,6 +23,12 @@ namespace Project_partB_Balychev_Program
             Console.WriteLine("1 - Add computer item");
             Console.WriteLine("2 - Add alco item");
         }
+        public static void ChooseRemove() 
+        {
+            Console.WriteLine("1 - Delete computer item");
+            Console.WriteLine("2 - Delete alco item");
+
+        }
 
     }
 }

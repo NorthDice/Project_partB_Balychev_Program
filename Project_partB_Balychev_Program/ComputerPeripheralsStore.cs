@@ -96,10 +96,29 @@ namespace Project_partB_Balychev_Program
                 price = value;
             }
         }
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            ComputerPeripheralsStore other = (ComputerPeripheralsStore)obj;
+
+            return CompanyName == other.CompanyName &&
+                   QuantityInStock == other.QuantityInStock &&
+                   Price == other.Price &&
+                   Type == other.Type;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(CompanyName, QuantityInStock, Price, Type);
+        }
 
         public override string ToString()
         {
-            return $"Company name: {CompanyName} | Quantity in Stock {QuantityInStock} | Price {Price} | Type of product {Type}";
+            return $"\n Company name: {CompanyName} | Quantity in Stock {QuantityInStock} | Price {Price} | Type of product {Type}";
         }
     }
 }

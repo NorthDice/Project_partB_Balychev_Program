@@ -10,7 +10,7 @@ namespace Project_partB_Balychev_Program
 {
     public class StoreInventory : IEnumerable<StoreItem>, ICollection,Iinvoice
     {
-        private List<StoreItem> items;
+        protected List<StoreItem> items;
 
         public StoreInventory()
         {
@@ -65,12 +65,10 @@ namespace Project_partB_Balychev_Program
             {
                 throw new ArgumentNullException(nameof(item), "Item cannot be null.");
             }
-
-            if (!items.Contains(item))
+            if(!items.Contains(item))
             {
-                throw new ArgumentException("Item not found in the inventory.", nameof(item));
+                throw new ArgumentException();
             }
-
             return items.Remove(item);
         }
 
@@ -78,6 +76,7 @@ namespace Project_partB_Balychev_Program
         {
             return ((IEnumerable)items).GetEnumerator();
         }
+
 
         public void CopyTo(Array array, int index)
         {

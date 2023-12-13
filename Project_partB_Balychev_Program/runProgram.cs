@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,6 +25,7 @@ namespace Project_partB_Balychev_Program
             while(true)
             {
                 Menu.Options();
+
                 mode = Reader.ReadInt32(0,6);
 
                 switchMenu(mode);
@@ -38,7 +40,7 @@ namespace Project_partB_Balychev_Program
                     ChooseAdd();
                     break;
                 case 2:
-                    DeleteItem();
+                   ChooseDelete();
                     break;
                 case 3:
                     CheckAvailability();
@@ -58,8 +60,8 @@ namespace Project_partB_Balychev_Program
                     Console.WriteLine("Unknown operation!");
                     break;
             }
-
         }
+
         private void ChooseAdd()
         {
             Menu.ChooseAdd();
@@ -67,6 +69,30 @@ namespace Project_partB_Balychev_Program
             int option = Reader.ReadInt32(1, 2);
 
             SwitchAdd(option);
+        }
+
+        private void ChooseDelete() 
+        { 
+            Menu.ChooseRemove();
+
+            int option = Reader.ReadInt32(1, 2);
+
+            SwitchDelete(option);
+        }
+
+        private void SwitchDelete(int option)
+        {
+            switch(option)
+            {
+                case 1:
+                    DeletePeripheryItem();
+                    break;
+
+                case 2:
+                    DeleteAlcoholItem();
+                    break;
+
+            }
         }
         private void SwitchAdd(int option) 
         {
@@ -95,9 +121,9 @@ namespace Project_partB_Balychev_Program
             computerPeripheralAdd.CompanyName = Console.ReadLine();
 
             Console.WriteLine("Input count of items in stock: ");
-            computerPeripheralAdd.QuantityInStock = int.Parse(Console.ReadLine());
+            computerPeripheralAdd.QuantityInStock = Reader.ReadInt32();
 
-            Console.WriteLine("Input price (more than 1000 and less then 0,99:");
+            Console.WriteLine("Input price (more than 0,99 and less then 1000):");
             computerPeripheralAdd.Price = double.Parse(Console.ReadLine());
 
             Console.WriteLine("Input type of item ( Headphones,Mouse,Keyboard,PowerBank )");
@@ -115,9 +141,9 @@ namespace Project_partB_Balychev_Program
             AlcoItemAdd.AlcoCompanyName = Console.ReadLine();
 
             Console.WriteLine("Input count of items in stock: ");
-            AlcoItemAdd.QuantityInStock = int.Parse(Console.ReadLine());
+            AlcoItemAdd.QuantityInStock = Reader.ReadInt32();
 
-            Console.WriteLine("Input price (more than 5000 and less then 1,99:");
+            Console.WriteLine("Input price (more than 1,99 and less then 5000 ):");
             AlcoItemAdd.Price = double.Parse(Console.ReadLine());
 
             Console.WriteLine("Input type of item ( Rum, Whiskey, Cognac, Bear, Vodka, )");
@@ -127,24 +153,60 @@ namespace Project_partB_Balychev_Program
 
         }
 
-        private void DeleteItem()
+        private void DeletePeripheryItem()
         {
             Console.WriteLine("Deleting item from the store: ");
             Console.WriteLine("Input company name:");
 
-            ComputerPeripheralsStore computerPeripheralRemove = new ComputerPeripheralsStore();
-            computerPeripheralRemove.CompanyName = Console.ReadLine();
+            string companyName = Console.ReadLine();
 
             Console.WriteLine("Input count of items in stock: ");
-            computerPeripheralRemove.QuantityInStock = int.Parse(Console.ReadLine());
+            int quantityInStock = Reader.ReadInt32();
 
-            Console.WriteLine("Input price (more than and less then: ");
-            computerPeripheralRemove.Price = double.Parse(Console.ReadLine());
+            Console.WriteLine("Input price (more than and less than: ");
+            double price = double.Parse(Console.ReadLine());
 
-            Console.WriteLine("Input type of item ( Headphones,Mouse,Keyboard,PowerBank");
-            computerPeripheralRemove.Type = (PeripheriItems)Enum.Parse(typeof(PeripheriItems), Console.ReadLine());
+            Console.WriteLine("Input type of item ( Headphones,Mouse,Keyboard,PowerBank )");
+            PeripheriItems itemType = (PeripheriItems)Enum.Parse(typeof(PeripheriItems), Console.ReadLine());
 
-            storeInventory.Remove(computerPeripheralRemove);
+            // Створюємо об'єкт для пошуку
+            ComputerPeripheralsStore itemToDelete = new ComputerPeripheralsStore()
+            {
+                CompanyName = companyName,
+                QuantityInStock = quantityInStock,
+                Price = price,
+                Type = itemType
+            };
+
+            bool removed = storeInventory.Remove(itemToDelete);
+
+            if (removed)
+            {
+                Console.WriteLine("Item removed successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Item not found in the inventory.");
+            }
+        }
+        private void DeleteAlcoholItem()
+        {
+            Console.WriteLine("Deleting alcohol item from the store:");
+            Console.WriteLine("Input company name:");
+
+            string companyName = Console.ReadLine();
+
+            Console.WriteLine("Input count of items in stock: ");
+            int quantityInStock = Reader.ReadInt32();
+
+            Console.WriteLine("Input price (more than 1.99 and less than 5000):");
+            double price = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("Input type of item ( Rum, Whiskey, Cognac, Bear, Vodka):");
+            AlcoholItems type = (AlcoholItems)Enum.Parse(typeof(AlcoholItems), Console.ReadLine());
+
+            AlcoholStore alcoholItemRemove = new AlcoholStore(companyName, quantityInStock, price, type);
+            storeInventory.Remove(alcoholItemRemove);
         }
 
         private void CheckAvailability()
@@ -156,15 +218,16 @@ namespace Project_partB_Balychev_Program
             isComputerPeripheralContains.CompanyName = Console.ReadLine();
 
             Console.WriteLine("Input count of items in stock: ");
-            isComputerPeripheralContains.QuantityInStock = int.Parse(Console.ReadLine());
+            isComputerPeripheralContains.QuantityInStock = Reader.ReadInt32();
 
-            Console.WriteLine("Input price (more than 0.99 and less then 1000:");
+            Console.WriteLine("Input price (more than 0.99 and less then 1000):");
             isComputerPeripheralContains.Price = double.Parse(Console.ReadLine());
 
-            Console.WriteLine("Input type of item ( Headphones,Mouse,Keyboard,PowerBank");
+            Console.WriteLine("Input type of item ( Headphones,Mouse,Keyboard,PowerBank )");
             isComputerPeripheralContains.Type = (PeripheriItems)Enum.Parse(typeof(PeripheriItems), Console.ReadLine());
 
             storeInventory.Contains(isComputerPeripheralContains);
+            Console.WriteLine(isComputerPeripheralContains.ToString()); 
         }
 
         private void SortByPrice()
